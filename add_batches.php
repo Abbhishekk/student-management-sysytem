@@ -9,16 +9,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="keywords"
-        content="tailwind,tailwindcss,tailwind css,css,starter template,free template,admin templates, admin template, admin dashboard, free tailwind templates, tailwind example">
-    <!-- Css -->
+    
     <link rel="stylesheet" href="./dist/styles.css">
     <link rel="stylesheet" href="./dist/all.css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i,700,700i" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
-    <title>Dashboard | Tailwind Admin</title>
+    <title>AceTech</title>
 </head>
 
 <body>
@@ -34,8 +32,8 @@
                         <h1 class="text-white p-2">Logo</h1>
                     </div>
                     <div class="p-1 flex flex-row items-center">
-                        <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full"
-                            src="https://avatars0.githubusercontent.com/u/4323180?s=460&v=4" alt="">
+                    <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full"
+                            src="img/ACETECH (2).png" alt="logo">
                         <a href="#" onclick="profileToggle()"
                             class="text-white p-2 no-underline hidden md:block lg:block">Ace-Tech</a>
                         <div id="ProfileDropDown"
