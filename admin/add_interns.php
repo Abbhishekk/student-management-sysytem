@@ -1,3 +1,15 @@
+<?php 
+    include "db.php";        
+    include 'fun.php';
+
+    $connect=new connect();
+    $fun=new fun($connect->dbconnect());
+    
+     
+     
+    
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
-    <title>AceTech</title>
+    <title>Buttons | Tailwind Admin</title>
 </head>
 <style>
     @import url(https://fonts.googleapis.com/css?family=Open+Sans);
@@ -39,8 +51,7 @@ font-family: 'Open Sans', sans-serif;
                     <h1 class="text-white p-2">Logo</h1>
                 </div>
                 <div class="p-1 flex flex-row items-center">
-                <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full"
-                            src="img/ACETECH (2).png" alt="logo">
+                    <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full" src="https://avatars0.githubusercontent.com/u/4323180?s=460&v=4" alt="">
                     <a href="#" onclick="profileToggle()" class="text-white p-2 no-underline hidden md:block lg:block">ACETECH</a>
                     <div id="ProfileDropDown" class="rounded hidden shadow-md bg-white absolute pin-t mt-12 mr-1 pin-r">
                         <ul class="list-reset">
@@ -63,7 +74,7 @@ font-family: 'Open Sans', sans-serif;
         <li class=" w-full h-full py-3 px-2 border-b border-light-border ">
             <a href="index.php"
                class="font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline">
-                <i class=" fa  float-left mx-2 ">&#xf0e4;</i>
+                <i class=" fa fa-dashboard float-left mx-2 "></i>
                 Dashboard
                 <span><i class="fas fa-angle-right float-right"></i></span>
             </a>
@@ -128,14 +139,14 @@ font-family: 'Open Sans', sans-serif;
                 <span><i class="fa fa-angle-right float-right"></i></span>
             </a>
         </li>
-        <li class="w-full h-full py-3 px-2 border-b border-300-border">
+        <li class="w-full h-full py-3 px-2 border-b border-300-border bg-white">
             <a href="add_interns.php" class="font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline">
                 <i class="fa fa-building float-left mx-2"></i>
                 Add Internship Students
                 <span><i class="fa fa-angle-right float-right"></i></span>
             </a>
         </li>
-        <li class="w-full h-full py-3 px-2 border-b border-300-border bg-white">
+        <li class="w-full h-full py-3 px-2 border-b border-300-border">
             <a href="view_intern.php" class="font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline">
                 <i class="fa fa-bullhorn float-left mx-2"></i>
                 View Internship Students
@@ -172,7 +183,7 @@ font-family: 'Open Sans', sans-serif;
 
                 <div class="flex flex-col">
                     <div class="m-10">
-                        <form action="view_s.php" method="POST">    
+                        <form action="add_interns.php" method="POST">    
                         <label for="id" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -187,14 +198,14 @@ font-family: 'Open Sans', sans-serif;
                      <div class="m-10">
                         
                         <?php
-                            include "db.php";
+                            
                             if(isset($_POST['delete'])){
                                 
                                 if(!empty($_POST['ids'])){
                                     foreach($_POST['ids'] as $checked){
                                       
-                                      $delete = "DELETE FROM `working_interns` WHERE id =".$checked."";
-                                        if(mysqli_query($conn,$delete)){
+                                        $query = $fun->deleteInternById($checked);
+                                        if($query){
                                             echo "deleted";
                                         
                                         }
@@ -206,21 +217,15 @@ font-family: 'Open Sans', sans-serif;
                                 
                                 
                             }
-                            if(isset($_POST['complete'])){
+                            if(isset($_POST['intern'])){
                                 
                                 if(!empty($_POST['ids'])){
-                                    $i = 0;
-                                    foreach($_POST['ids'] as $checked ){
+                                    foreach($_POST['ids'] as $checked){
                                       
-                                      $intern = "UPDATE `working_interns` SET `status`= 0 WHERE `id`='".$checked."'";
-                                        if(mysqli_query($conn,$intern)){
-                                            if(isset($_POST['CID'])){
-                                                $cid = $_POST['CID'];
-                                                $add = "UPDATE `working_interns` SET `CID`='".$cid[$i]."' WHERE `id`='".$checked."'";
-                                                mysqli_query($conn,$add);
-                                                $i++;
-                                            }
+                                        $query = $fun->transferIntern($checked);
+                                        if($query){
                                             
+                                            $fun->deleteInternById($checked);
                                             echo "Added";
                                         
                                         }
@@ -232,14 +237,13 @@ font-family: 'Open Sans', sans-serif;
                                 
                                 
                             }
-                            
                             if(isset($_POST['submit'])){
                                 $id = $_POST['id'];
                                 
                                 $id1 = substr($id,3);
                                 
-                                $fetch = "SELECT * FROM working_interns where id =".$id1.";";
-                                $result = mysqli_query($conn, $fetch);
+                                
+                                $result = $fun->getInternsByID($id1);
                                 $sr = 1;
                                 $limit = 1;
                                 $pn = 1;
@@ -256,16 +260,16 @@ font-family: 'Open Sans', sans-serif;
                                 
                                     $start_from = ($pn-1) * $limit;  
                                     $sr = $start_from+1;
-                                    $fetch = "SELECT * FROM working_interns LIMIT $start_from, $limit"; 
+                                     
                                 
-                                $result = mysqli_query($conn, $fetch);
+                                $result = $fun->getInternWithLimit($start_from,$limit);
                             }
                             
                             
                             if (mysqli_num_rows($result) > 0) {
                                 
                             ?>
-                                <form action="view_intern.php" method="POST" >
+                                <form action="add_interns.php" method="POST" >
                                 <table class="table-auto border-collapse border border-slate-500 p-1" style="width: 100%">
                                     
                                     <thead>
@@ -278,7 +282,7 @@ font-family: 'Open Sans', sans-serif;
                                             <th class="border border-slate-500 p-4 bg-grey">Internship domain</th>
                                             <th class="border border-slate-500 p-4 bg-grey">Internship type</th>
                                             <th class="border border-slate-500 p-4 bg-grey">Internship duration</th>
-                                            <th class="border border-slate-500 p-4 bg-grey">CID</th>
+                                            
                                             
                                         </tr>
                                     </thead>
@@ -287,46 +291,10 @@ font-family: 'Open Sans', sans-serif;
                         <?php
                                     while ($res = mysqli_fetch_assoc($result)) {
                                             ?>
-                                            <?php if($res['status']){?>
-                                            <tr class = "bg-green-200">
-                                                <td class="border border-slate-500 p-4 gap-4" >
-                                                    <?php echo $sr ?>
-                                                    <input type="checkbox" name="ids[]" id="<?php echo $res['id'] ?>" value="<?php echo $res['id'] ?>" >
-                                                </td>
-                                                <td class="border border-slate-500 p-4" >
-                                                    
-                                                    <?php echo "AIN".$res['id'] ?>
-                                                </td>
-                                                <td class="border border-slate-500 p-4">
-                                                    
-                                                    <?php echo $res['name'] ?>
-                                                </td>
-                                                <td class="border border-slate-500 p-4">
-                                                    
-                                                    <?php echo $res['email'] ?>
-                                                </td>
-                                                <td class="border border-slate-500 p-4">
-                                                    <?php echo $res['phone_no.'] ?>
-                                                </td>
-                                                <td class="border border-slate-500 p-4">
-                                                    <?php echo $res['i_domain'] ?>
-                                                </td>
-                                                <td class="border border-slate-500 p-4">
-                                                    <?php echo $res['i_type'] ?>
-                                                </td>
-                                                <td class="border border-slate-500 p-4">
-                                                    <?php echo $res['i_duration'] ?>
-                                                </td>
-                                                
-                                                <td class="border border-slate-500 p-4 text-center">
-                                                <input type="text" name="CID[]" id="CID" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Add CID" >
-                                                </td> 
-                                            </tr>
-                                        <?php }?>
-                                        <?php if($res['status'] == 0){?>
+
                                             <tr >
-                                                <td class="border border-slate-500 p-4 gap-4" >
-                                                    <?php echo $sr ?>
+                                                <td class="border border-slate-500 flex p-4 gap-4" >
+                                                    <p><?php echo $sr ?></p>
                                                     <input type="checkbox" name="ids[]" id="<?php echo $res['id'] ?>" value="<?php echo $res['id'] ?>" >
                                                 </td>
                                                 <td class="border border-slate-500 p-4" >
@@ -354,44 +322,56 @@ font-family: 'Open Sans', sans-serif;
                                                     <?php echo $res['i_duration'] ?>
                                                 </td>
                                                 
-                                                <td class="border border-slate-500 p-4 text-center">
-                                                <input type="text" name="CID[]" id="CID" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Add CID" >
-                                                </td> 
-                                            </tr>
-                                        <?php }?>
-                                        <?php
+                                                
+                                                
+                                                
                                             
+                                            
+                                            
+                                            </tr>
+                                        <?php
                                         $sr++;
                                     }
+                                    ?>
+                                    </tbody>
+                                            </table> 
+                                            <button type="submit" name="intern" class="bg-green-500 rounded p-2 m-5 ml-0">Add Intern</button>
+                                            <button type="submit" name="delete" class="bg-red-500 rounded p-2 m-5">Delete!</button>
+                                            
+                                            </form> 
+                                    <?php 
                             } 
                             else {
-                                echo "No student found";
+                                echo "No Intern found<br>";
                             }
                             
                            
                         ?>
-                                    
-                                    </tbody>
-                                </table>
-                                <button type="submit" name="complete" class="bg-green-500 rounded p-2 m-5 ml-0">Complete!</button>
-                                <button type="submit" name="delete" class="bg-red-500 rounded p-2 m-5">Delete!</button>
-                                </form>
+                                     
+                                   
+                                
                                 <nav aria-label="Page navigation example" class=" py-5">
                                     <ul class="inline-flex -space-x-px gap-5">
                                     <?php  
                                         if(isset($_POST['submit'])){
                                             $id1 = $_POST['id'];
                                             $id = substr($id1,3);
-                                            $sql = "SELECT COUNT(*) FROM intern where id =".$id.""; 
+                                            $rs_result = $fun->getInternsByID($id);
                                             
                                         }
                                         else{
-                                            $sql = "SELECT COUNT(*) FROM intern ";
+                                            $rs_result = $fun->getAllIntern();
+                                            
                                         }
                                          
-                                        $rs_result = mysqli_query($conn,$sql);  
-                                        $row = mysqli_fetch_row($rs_result);  
-                                        $total_records = $row[0];  
+                                        $row = mysqli_num_rows($rs_result);
+                                        
+                                        
+                                            
+                                            $total_records = $row;  
+                                           
+                                        
+                                        
 
                                         
                                         $total_pages = ceil($total_records / $limit);  
@@ -407,7 +387,7 @@ font-family: 'Open Sans', sans-serif;
                                         }
                                         };  
                                         echo $pagLink;
-                                        mysqli_close($conn);  
+                                        
                                     ?>
                                     </ul>
                                 </nav>

@@ -1,5 +1,9 @@
 <?php
     include "db.php";
+    include 'fun.php';
+
+    $connect=new connect();
+    $fun=new fun($connect->dbconnect());
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +13,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
+    <meta name="keywords"
+        content="tailwind,tailwindcss,tailwind css,css,starter template,free template,admin templates, admin template, admin dashboard, free tailwind templates, tailwind example">
+    <!-- Css -->
     <link rel="stylesheet" href="./dist/styles.css">
     <link rel="stylesheet" href="./dist/all.css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i,700,700i" rel="stylesheet">
@@ -32,8 +38,8 @@
                         <h1 class="text-white p-2">Logo</h1>
                     </div>
                     <div class="p-1 flex flex-row items-center">
-                    <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full"
-                            src="img/ACETECH (2).png" alt="logo">
+                        <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full"
+                            src="https://avatars0.githubusercontent.com/u/4323180?s=460&v=4" alt="">
                         <a href="#" onclick="profileToggle()"
                             class="text-white p-2 no-underline hidden md:block lg:block">Ace-Tech</a>
                         <div id="ProfileDropDown"
@@ -219,20 +225,13 @@
                         $perks = $_POST['perks'];
                         $skills = $_POST['skills'];
                            
-                        $sql = "INSERT INTO `internships`( `name`, `type`, `duration`, `perks`, `skills`, `status`) VALUES ('".$name."','".$type."','".$duration."','".$perks."','".$skills."',1)";
-                        if(mysqli_query($conn, $sql)){
+                        $fun->insertInternships($name,$type,$duration,$perks,$skills);
                         
-                        }
                     }
                     if(isset($_GET['id'])){
                         $id=$_GET['id'];
-                        $sql="UPDATE `internships` SET
-                            `status`='".$_GET['status']."' WHERE id='".$id."';";
-
-                        // Execute the query
-                        mysqli_query($conn,$sql);
-
-		
+                        $status = $_GET['status'];
+                        $fun->updateInternshipsStatus($id,$status);
                     }
                     ?>
                     </div>
@@ -240,8 +239,8 @@
                         
                     <?php
                         
-                        $fetch = "SELECT * FROM internships ";
-                        $result = mysqli_query($conn, $fetch);
+                        
+                        $result = $fun->getAllInternships();
                         if (mysqli_num_rows($result) > 0) {
                         ?>
                             <table class="table-auto border-collapse border border-slate-500 p-1" style="width: 100%">
@@ -309,7 +308,7 @@
                         else {
                             echo "0 Results";
                         }
-                        mysqli_close($conn);
+                        
                     ?>
                                 </tbody>
                             </table>

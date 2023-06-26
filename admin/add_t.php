@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./dist/all.css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i,700,700i" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
-    <title>AceTech</title>
+    <title>UI | Tailwind Admin</title>
 </head>
 
 <body>
@@ -26,8 +26,8 @@
                         <h1 class="text-white p-2">Logo</h1>
                     </div>
                     <div class="p-1 flex flex-row items-center">
-                    <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full"
-                            src="img/ACETECH (2).png" alt="logo">
+                        <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full"
+                            src="https://avatars0.githubusercontent.com/u/4323180?s=460&v=4" alt="">
                         <a href="#" onclick="profileToggle()"
                             class="text-white p-2 no-underline hidden md:block lg:block">Adam Wathan</a>
                         <div id="ProfileDropDown"

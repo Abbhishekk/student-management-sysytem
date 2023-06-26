@@ -1,5 +1,9 @@
 <?php 
     include "db.php";
+    include 'fun.php';
+
+    $connect=new connect();
+    $fun=new fun($connect->dbconnect());
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,8 +86,7 @@ body{
                     <h1 class="text-white p-2">Logo</h1>
                 </div>
                 <div class="p-1 flex flex-row items-center">
-                <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full"
-                            src="img/ACETECH (2).png" alt="logo">
+                    <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full" src="https://avatars0.githubusercontent.com/u/4323180?s=460&v=4" alt="">
                     <a href="#" onclick="profileToggle()" class="text-white p-2 no-underline hidden md:block lg:block">Adam Wathan</a>
                     <div id="ProfileDropDown" class="rounded hidden shadow-md bg-white absolute pin-t mt-12 mr-1 pin-r">
                         <ul class="list-reset">
@@ -127,7 +130,7 @@ body{
                 <span><i class="fa fa-angle-right float-right"></i></span>
             </a>
         </li>
-        <li class="w-full h-full py-3 px-2 border-b border-light-border">
+        <li class="w-full h-full py-3 px-2 border-b border-light-border bg-white">
             <a href="edit_s.php"
                class="font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline">
                 <i class="fas fa-edit float-left mx-2"></i>
@@ -192,7 +195,7 @@ body{
                 <span><i class="fa fa-angle-right float-right"></i></span>
             </a>
         </li>
-        <li class="w-full h-full py-3 px-2 border-b border-300-border bg-white">
+        <li class="w-full h-full py-3 px-2 border-b border-300-border">
             <a href="edit_batch.php" class="font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline">
                 <i class="fa fa-edit float-left mx-2"></i>
                 Edit batches
@@ -239,28 +242,26 @@ body{
                             $fees = $_POST['fees'];
                             $aadhar = $_POST['aadhar'];
                             $date = $_POST['date'];
-                            $sql = "UPDATE `stud_details` SET `name`='".$name."',`age`='".$age."',`mobile`='".$mobile."',`school_name`='".$school."',`course_name`='".$course."',`course_fees`='".$fees."',`aadhar`='".$aadhar."',`date_of_joining`='".$date."',`batch` ='".$batch."' WHERE `id`='".$id."'";
-                            if(mysqli_query($conn, $sql)){
-                            
-                            }
+                           
+                            $fun->updateStudentDetail($id,$name,$age,$mobile, $batch,$school,$course, $fees,$aadhar,$date);
                         }
                     ?>
                     <?php 
                          if(isset($_POST['submit'])){
                             $id1 = $_POST['id'];
                             $id = substr($id1,3);
-                            $fetch = "SELECT * FROM stud_details where id =".$id.";";
-                            $result = mysqli_query($conn, $fetch);
+                           
+                            $result =$fun->getStudentByID($id);
                             $user = mysqli_fetch_assoc($result);
                             
 
                     ?>
                     <div class="m-10">
                     <?php 
-                        $courses = "SELECT * FROM `course_details` WHERE 1";
-                        $c = mysqli_query($conn, $courses);
-                        $batch = "SELECT * FROM `batches` WHERE 1";
-                        $b = mysqli_query($conn, $batch);
+                        
+                        $c = $fun->getCourseDetails();
+                        
+                        $b = $fun->getAllBatches();
                      ?> 
                     <form action="edit_s.php" method="POST">
                         <div class="relative z-0 w-full mb-6 group">

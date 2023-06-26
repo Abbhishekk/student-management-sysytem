@@ -1,3 +1,18 @@
+<?php 
+    include "db.php";
+    include "fun.php";
+
+    $connect=new connect();
+    $fun=new fun($connect->dbconnect());
+
+    
+    $getcourse = $fun->getCourseDetails();
+   
+    $getbatch = $fun->getAllBatches();
+
+   
+    
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +27,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
-    <title>AceTech</title>
+    <title>Buttons | Tailwind Admin</title>
 </head>
 <style>
     @import url(https://fonts.googleapis.com/css?family=Open+Sans);
@@ -39,9 +54,8 @@ font-family: 'Open Sans', sans-serif;
                     <h1 class="text-white p-2">Logo</h1>
                 </div>
                 <div class="p-1 flex flex-row items-center">
-                <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full"
-                            src="img/ACETECH (2).png" alt="logo">
-                    <a href="#" onclick="profileToggle()" class="text-white p-2 no-underline hidden md:block lg:block">ACETECH</a>
+                    <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full" src="https://avatars0.githubusercontent.com/u/4323180?s=460&v=4" alt="">
+                    <a href="#" onclick="profileToggle()" class="text-white p-2 no-underline hidden md:block lg:block">Adam Wathan</a>
                     <div id="ProfileDropDown" class="rounded hidden shadow-md bg-white absolute pin-t mt-12 mr-1 pin-r">
                         <ul class="list-reset">
                           <li><a href="#" class="no-underline px-4 py-2 block text-black hover:bg-gray-light">My account</a></li>
@@ -63,7 +77,7 @@ font-family: 'Open Sans', sans-serif;
         <li class=" w-full h-full py-3 px-2 border-b border-light-border ">
             <a href="index.php"
                class="font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline">
-                <i class="fa fa-dashboard  float-left mx-2 "></i>
+                <i class="fa  float-left mx-2 ">&#xf0e4;</i>
                 Dashboard
                 <span><i class="fas fa-angle-right float-right"></i></span>
             </a>
@@ -76,7 +90,7 @@ font-family: 'Open Sans', sans-serif;
                 <span><i class="fa fa-angle-right float-right"></i></span>
             </a>
         </li>
-        <li class="w-full h-full py-3 px-2 border-b border-light-border ">
+        <li class="w-full h-full py-3 px-2 border-b border-light-border bg-white">
             <a href="view_s.php"
                class="font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline">
                 <i class="fas fa-address-card float-left mx-2"></i>
@@ -156,13 +170,13 @@ font-family: 'Open Sans', sans-serif;
                 <span><i class="fa fa-angle-right float-right"></i></span>
             </a>
         </li>
-        <li class="w-full h-full py-3 px-2 border-b border-300-border bg-white">
-            <a href="transaction_history.php" class="font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline">
-                <i class="fas fa-money-check-alt float-left mx-2"></i>
-                Transaction history
-                <span><i class="fa fa-angle-right float-right"></i></span>
-            </a>
-        </li>
+        <li class="w-full h-full py-3 px-2 border-b border-300-border ">
+                        <a href="transaction_history.php" class="font-sans font-hairline hover:font-normal text-sm text-nav-item no-underline">
+                        <i class="fa fa-edit float-left mx-2"></i>
+                            Transaction history
+                        <span><i class="fa fa-angle-right float-right"></i></span>
+                        </a>
+                    </li>
     </ul>
 
 </aside>
@@ -178,33 +192,71 @@ font-family: 'Open Sans', sans-serif;
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </div>
-                            <input type="search" id="id" name="id" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Intern id" required>
+                            <input type="search" id="id" name="id" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter student id" required>
                             <button type="submit" name="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
                         </div>
                     </form>
+                    </div>
+                    <div class="m-10">
+                        <form action="view_s.php" class="flex gap-10" method="post">
+                        <select id="filteroptions" name="batch" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option selected>Choose a batch</option>
+                        
+                        <?php 
+                            if(mysqli_num_rows($getbatch) > 0){
+                                while($bat = mysqli_fetch_assoc($getbatch)){
+                        ?>
+                        <option value="<?php echo $bat['name']?>"><?php echo $bat['name']?></option>
+                        <?php
+                             
+                            }
+                        }
+                        ?>
+                        
+                        </select>
+                        
+                        <button type="submit" name="filter" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Filter</button>
+                        </form>
                     </div>
                     
                      <div class="m-10">
                         
                         <?php
-                            include "db.php";
-                            
-                            
-                            
+                           
+                            if(isset($_POST['delete'])){
+                                $d_id = $_POST['id'];
+                                $delete = $fun->deleteStudDetails($d_id);
+                                if($delete){
+                                    echo "deleted";
+                                    
+                                }
+                                else{
+                                    echo"Not deleted";
+                                }
+                            }
                             if(isset($_POST['submit'])){
                                 $id = $_POST['id'];
-                                
+                                $remaining_amount = 0;
+                                $total_fees = 0;
                                 $id1 = substr($id,3);
+                                if(isset($_POST['filter'])){
+                                    
+                                    $fetch = $fun->filterStudentWithBatch($id1,$_POST['batch']);
+                                }
+                                else{
+
+                                    $result = $fun->getStudentByID($id1);
+                                }
                                 
-                                $fetch = "SELECT * FROM transaction_history where id =".$id1.";";
-                                $result = mysqli_query($conn, $fetch);
                                 $sr = 1;
                                 $limit = 1;
                                 $pn = 1;
                             }
                             else{
                                 $limit = 10;  
-        
+                                $remaining_amount = 0;
+                                $total_fees = 0;
+                                
                                     if (isset($_GET["page"])) { 
                                     $pn  = $_GET["page"]; 
                                     } 
@@ -214,51 +266,54 @@ font-family: 'Open Sans', sans-serif;
                                 
                                     $start_from = ($pn-1) * $limit;  
                                     $sr = $start_from+1;
-                                    $fetch = "SELECT * FROM transaction_history LIMIT $start_from, $limit"; 
+                                    if(isset($_POST['filter'])){
+                                        
+                                        $result = $fun->getStudentWithLimitAndBatch($start_from,$limit,$_POST['batch']);
+                                    }
+                                    else{
+
+                                        $result = $fun->getStudentWithLimit($start_from,$limit);
+                                    }
                                 
-                                $result = mysqli_query($conn, $fetch);
+                               
                             }
                             
                             
                             if (mysqli_num_rows($result) > 0) {
                                 
                             ?>
-                                
                                 <table class="table-auto border-collapse border border-slate-500 p-1" style="width: 100%">
                                     
                                     <thead>
                                         <tr>
                                             <th class="border border-slate-500 p-4 bg-grey">Sr no.</th>
-                                            <th class="border border-slate-500 p-4 bg-grey">Id</th>
-                                            
+                                            <th class="border border-slate-500 p-4 bg-grey">Student Id</th>
                                             <th class="border border-slate-500 p-4 bg-grey">Name</th>
-                                            <th class="border border-slate-500 p-4 bg-grey">Amount</th>
-                                            <th class="border border-slate-500 p-4 bg-grey">reason</th>
-                                            <th class="border border-slate-500 p-4 bg-grey">DateTime</th>
-                                            
-                                            
+                                            <th class="border border-slate-500 p-4 bg-grey">Age</th>
+                                            <th class="border border-slate-500 p-4 bg-grey">Mobile no.</th>
+                                            <th class="border border-slate-500 p-4 bg-grey">Course</th>
+                                            <th class="border border-slate-500 p-4 bg-grey">Batch</th>
+                                            <th class="border border-slate-500 p-4 bg-grey">Fees</th>
+                                            <th class="border border-slate-500 p-4 bg-grey">Remaining Fees</th>
+                                            <th class="border border-slate-500 p-4 bg-grey">Action</th>
+                                            <th class="border border-slate-500 p-4 bg-grey">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    
                         <?php
                                     while ($res = mysqli_fetch_assoc($result)) {
+                                        $total_fees += $res['course_fees'];
+                                        $remaining_amount += $res['balance_fees'];
                                             ?>
-                                            
-                                            <tr class = "">
-                                                <td class="border border-slate-500 p-4 gap-4" >
+                                        <form action="view_s.php" method="POST">
+                                            <tr >
+                                                <td class="border border-slate-500 p-4" >
+                                                    <input type="text" name="id" id="<?php echo $res['id'] ?>" value="<?php echo $res['id'] ?>" hidden>
                                                     <?php echo $sr ?>
-                                                    
                                                 </td>
                                                 <td class="border border-slate-500 p-4" >
                                                     
-                                                    <?php  if($res['reason'] == 'course_fees' ){
-                                                        echo "ACE".$res['id'];
-                                                    }
-                                                        else{
-                                                            echo "ACE".$res['id'];
-                                                        }  
-                                                    ?>
+                                                    <?php echo "ACE".$res['id'] ?>
                                                 </td>
                                                 <td class="border border-slate-500 p-4">
                                                     
@@ -266,19 +321,52 @@ font-family: 'Open Sans', sans-serif;
                                                 </td>
                                                 <td class="border border-slate-500 p-4">
                                                     
-                                                    <?php echo $res['amount'] ?>
+                                                    <?php echo $res['age'] ?>
                                                 </td>
                                                 <td class="border border-slate-500 p-4">
-                                                    <?php echo $res['reason'] ?>
+                                                    <?php echo $res['mobile'] ?>
                                                 </td>
                                                 <td class="border border-slate-500 p-4">
-                                                    <?php echo $res['date'] ?>
+                                                    <?php echo $res['course_name'] ?>
+                                                </td>
+                                                <td class="border border-slate-500 p-4">
+                                                    <?php echo $res['batch'] ?>
+                                                </td>
+                                                <td class="border border-slate-500 p-4">
+                                                    <?php echo $res['course_fees'] ?>
+                                                </td>
+                                                <td class="border border-slate-500 p-4">
+                                                    <?php echo $res['balance_fees'] ?>
+                                                </td>
+                                                
+                                                <td class="border border-slate-500 p-4 text-center">
+                                                    <button type="submit" name="delete" class="bg-red-500 rounded p-2">Delete!</button>
+                                                </td>
+                                                </form>
+                                                <td class="border border-slate-500 p-4">
+                                                <?php 
+                                                    if($res['status'] == 1){    
+                                                ?>
+                                                <a href="inactive.php?id=<?php echo $res['id']?>" >
+                                                <img src="img/on.png" alt="switch" class="w-32 ">
+                                                </a>
+
+                                                <?php 
+                                                    }    
+                                                ?>
+                                                <?php 
+                                                    if($res['status'] == 0){    
+                                                ?>
+                                                <a href="active.php?id=<?php echo $res['id']?>" type="submit" name="toggle" >
+                                                <img src="img/off.png" alt="switch" class="w-32 ">
+                                                </a>
+                                                <?php 
+                                                    }    
+                                                ?>
                                                 </td>
                                             </tr>
-                                       
                                         
                                         <?php
-                                            
                                         $sr++;
                                     }
                             } 
@@ -288,43 +376,47 @@ font-family: 'Open Sans', sans-serif;
                             
                            
                         ?>
-                                    
                                     </tbody>
                                 </table>
-                                
-                                
+                                <div>
+                                    <?php 
+                                    echo "<p> Total Fees: ".$total_fees."</p>";
+                                    echo "<p> Remaining Fees: ".$remaining_amount."</p>";
+                                    
+                                    ?>
+                                    <p></p>
+                                </div>
                                 <nav aria-label="Page navigation example" class=" py-5">
                                     <ul class="inline-flex -space-x-px gap-5">
                                     <?php  
                                         if(isset($_POST['submit'])){
-                                            $id1 = $_POST['id'];
-                                            $id = substr($id1,3);
-                                            $sql = "SELECT COUNT(*) FROM intern where id =".$id.""; 
+                                            
+                                           
+                                            $row = 1;
                                             
                                         }
                                         else{
-                                            $sql = "SELECT COUNT(*) FROM intern ";
+                                            $row = $fun->countTotalStudents();
                                         }
                                          
-                                        $rs_result = mysqli_query($conn,$sql);  
-                                        $row = mysqli_fetch_row($rs_result);  
-                                        $total_records = $row[0];  
+                                        
+                                        $total_records = $row;  
 
                                         
                                         $total_pages = ceil($total_records / $limit);  
                                         $pagLink = "";                        
                                         for ($i=1; $i<=$total_pages; $i++) {
                                         if ($i==$pn) {
-                                            $pagLink .= "<li class='active bg-violet-700' aria-current='page' > <a href='add_intern.php?page="
+                                            $pagLink .= "<li class='active bg-violet-700' aria-current='page' > <a href='view_s.php?page="
                                             .$i."' class='px-3 py-2 ml-0 leading-tight text-gray-500  bg-grey border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'>".$i."</a></li>";
                                         }            
                                         else  {
-                                            $pagLink .= "<li > <a href='add_intern.php?page="
+                                            $pagLink .= "<li > <a href='view_s.php?page="
                                             .$i."' class='px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'>".$i."</a></li>";  
                                         }
                                         };  
                                         echo $pagLink;
-                                        mysqli_close($conn);  
+                                        
                                     ?>
                                     </ul>
                                 </nav>
